@@ -34,6 +34,28 @@ public class ApiSpringApplication {
 		return "Save! ID Number: " + clientSet.getId();
 	}
 	
+	@PostMapping("/delete-client")
+	public String deleteClient(@RequestParam(value = "id") Long id) {
+
+		repository.deleteById(id);
+
+		return "Deletado! ID Number: " + id;
+	}
+	
+	@PostMapping("/update")
+	public String updateClient(@RequestParam(value = "id") Long id, @RequestParam(value = "coffee") String coffee) {
+
+		Optional<Client> clientToUpdate = repository.findById(id);
+		
+		Client clientUpdated = clientToUpdate.get();
+		
+		clientUpdated.setBestCoffee(coffee);
+		
+		repository.save(clientUpdated);
+
+		return "Atualizado para " + coffee + "! ID Number: " + id;
+	}
+	
 	@GetMapping("/name-search")
 	public List<Client> nameSearch(@RequestParam(value = "name") String name) {
 		
@@ -53,6 +75,13 @@ public class ApiSpringApplication {
 	public Optional<Client> searchById(@RequestParam(value = "id") Long id) {
 		
 		return repository.findById(id);
+	
+	}
+	
+	@GetMapping("/read-all")
+	public Iterable<Client> readAll() {
+		
+		return repository.findAll();
 	
 	}
 	

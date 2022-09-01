@@ -14,7 +14,10 @@ public class Client {
 	  private String firstName;
 	  private String bestCoffee;
 
-	  protected Client() {}
+	
+
+	
+	protected Client() {}
 
 	  public Client(String firstName, String bestCoffee) {
 	    this.firstName = firstName;
@@ -39,5 +42,10 @@ public class Client {
 	  public String getBestCoffee() {
 	    return bestCoffee;
 	  }
+	  
+	  public void setBestCoffee(String bestCoffee) {
+			this.bestCoffee = bestCoffee;
+		}
+
 	}
 

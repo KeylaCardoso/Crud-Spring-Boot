@@ -11,5 +11,7 @@ public interface ClientRepository extends CrudRepository<Client, Long> {
 	  List<Client> findByBestCoffee(String bestCoffee);
 
 	  Client findById(long id);
+	  
+	  
 
 }
