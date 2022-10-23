@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,7 @@ public class ApiSpringApplication {
 		return "Save! ID Number: " + clientSet.getId();
 	}
 	
-	@PostMapping("/delete-client")
+	@DeleteMapping("/delete-client")
 	public String deleteClient(@RequestParam(value = "id") Long id) {
 
 		repository.deleteById(id);
