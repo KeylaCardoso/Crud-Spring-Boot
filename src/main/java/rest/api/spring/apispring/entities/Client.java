@@ -1,4 +1,4 @@
-package rest.api.spring.apispring.jpa;
+package rest.api.spring.apispring.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
