@@ -17,7 +17,7 @@ public class Client {
 	
 
 	
-	protected Client() {}
+	  private Client() {}
 
 	  public Client(String firstName, String bestCoffee) {
 	    this.firstName = firstName;

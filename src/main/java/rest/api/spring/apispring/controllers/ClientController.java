@@ -1,14 +1,17 @@
 package rest.api.spring.apispring.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import rest.api.spring.apispring.entities.Client;
 import rest.api.spring.apispring.services.ClientService;
@@ -35,7 +38,7 @@ public class ClientController {
 		return "Deletado! ID Number: " + id;
 	}
 	
-	@PostMapping("/update")
+	@PutMapping("/update")
 	public String updateClient(@RequestParam(value = "id") Long id, @RequestParam(value = "coffee") String coffee) {
 
 		Client clientUpdated = service.updateClient(id, coffee);
@@ -46,24 +49,66 @@ public class ClientController {
 	}
 	
 	@GetMapping("/name-search")
-	public List<Client> nameSearch(@RequestParam(value = "name") String name) {
+	public ResponseEntity nameSearch(@RequestParam(value = "name") String name) {
 		
-		return service.findByFirstName(name);
+		try {
+			
+			List<Client> clientByName = service.findByFirstName(name);
+			return ResponseEntity
+					.status(HttpStatus.OK)
+					.body(clientByName);
+			
+		} catch (ResponseStatusException e) {
+			return ResponseEntity
+					.status(HttpStatus.NOT_FOUND)
+					.body(e.getMessage());
+		}
+		
+		
 	
 	}
 	
 	@GetMapping("/coffee-search")
-	public List<Client> coffeeSearch(@RequestParam(value = "coffee") String coffee) {
+	public ResponseEntity coffeeSearch(@RequestParam(value = "coffee") String coffee) {
 		
-		return service.findByBestCoffee(coffee);
+		try {
+			
+			List<Client> clientByBestCoffee = service.findByBestCoffee(coffee);
+			
+			return ResponseEntity
+					.status(HttpStatus.OK)
+					.body(clientByBestCoffee);
+			
+		} catch (ResponseStatusException e) {
+			return ResponseEntity
+					.status(HttpStatus.NOT_FOUND)
+					.body(e.getMessage());
+		}
+		
+		
 	
 	}
 	
 	
 	@GetMapping("/search-by-id")
-	public Optional<Client> searchById(@RequestParam(value = "id") Long id) {
+	public ResponseEntity searchById(@RequestParam(value = "id") Long id) {
 		
-		return service.findById(id);
+		try {
+			
+			Client clientById = service.findById(id);
+			
+			return ResponseEntity
+					.status(HttpStatus.OK)
+					.body(clientById);
+			
+		} catch (ResponseStatusException e) {
+			return ResponseEntity
+					.status(HttpStatus.NOT_FOUND)
+					.body(e.getMessage());
+			
+		}
+		
+		
 	
 	}
 	
