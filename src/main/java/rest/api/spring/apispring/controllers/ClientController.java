@@ -23,29 +23,58 @@ public class ClientController {
 	ClientService service;
 
 	@PostMapping("/client")
-	public String client(@RequestParam(value = "client") String client, @RequestParam(value = "coffee") String coffee) {
+	public ResponseEntity client(@RequestParam(value = "client") String client, @RequestParam(value = "coffee") String coffee) {
 		
-		Client clientSet = service.save(new Client(client, coffee));
-
-		return "Save! ID Number: " + clientSet.getId();
+		try {
+			Client clientSet = service.save(new Client(client, coffee));	
+			return ResponseEntity
+					.status(HttpStatus.OK)
+					.body("Save! ID Number: " + clientSet.getId());
+			
+		} catch (ResponseStatusException e) {
+			return ResponseEntity
+					.status(e.getStatus())
+					.body(e.getMessage());			
+		}		
+		
 	}
 	
 	@DeleteMapping("/delete-client")
-	public String deleteClient(@RequestParam(value = "id") Long id) {
+	public ResponseEntity deleteClient(@RequestParam(value = "id") String id) {
+		
+		try {
+			service.deleteById(id);
+			return ResponseEntity
+					.status(HttpStatus.OK)
+					.body("Deletado! ID Number: " + id);
+			
+		} catch (ResponseStatusException e) {
+			return ResponseEntity
+					.status(e.getStatus())
+					.body(e.getMessage());
+		}
+		
 
-		service.deleteById(id);
-
-		return "Deletado! ID Number: " + id;
 	}
 	
 	@PutMapping("/update")
-	public String updateClient(@RequestParam(value = "id") Long id, @RequestParam(value = "coffee") String coffee) {
-
-		Client clientUpdated = service.updateClient(id, coffee);
+	public ResponseEntity updateClient(@RequestParam(value = "id") String id, @RequestParam(value = "coffee") String coffee) {
 		
-		service.save(clientUpdated);
+		try {
+			
+			Client clientUpdated = service.updateClient(id, coffee);
+			service.save(clientUpdated);
+			return ResponseEntity
+					.status(HttpStatus.OK)
+					.body("Atualizado para " + coffee + "! ID Number: " + id);
+			
+		} catch (ResponseStatusException e) {
+			return ResponseEntity
+					.status(e.getStatus())
+					.body(e.getMessage());
+		}
+		
 
-		return "Atualizado para " + coffee + "! ID Number: " + id;
 	}
 	
 	@GetMapping("/name-search")
@@ -60,7 +89,7 @@ public class ClientController {
 			
 		} catch (ResponseStatusException e) {
 			return ResponseEntity
-					.status(HttpStatus.NOT_FOUND)
+					.status(e.getStatus())
 					.body(e.getMessage());
 		}
 		
@@ -81,7 +110,7 @@ public class ClientController {
 			
 		} catch (ResponseStatusException e) {
 			return ResponseEntity
-					.status(HttpStatus.NOT_FOUND)
+					.status(e.getStatus())
 					.body(e.getMessage());
 		}
 		
@@ -91,7 +120,7 @@ public class ClientController {
 	
 	
 	@GetMapping("/search-by-id")
-	public ResponseEntity searchById(@RequestParam(value = "id") Long id) {
+	public ResponseEntity searchById(@RequestParam(value = "id") String id) {
 		
 		try {
 			
@@ -103,7 +132,7 @@ public class ClientController {
 			
 		} catch (ResponseStatusException e) {
 			return ResponseEntity
-					.status(HttpStatus.NOT_FOUND)
+					.status(e.getStatus())
 					.body(e.getMessage());
 			
 		}
